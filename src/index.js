@@ -19,7 +19,6 @@ const mylist = [
   },
 ];
 
-
 const getmylist = () => {
   const listGroup = document.querySelector('.score-record');
   mylist.map((item) => {
