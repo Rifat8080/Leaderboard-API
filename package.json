@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.3.1"
   }
 }

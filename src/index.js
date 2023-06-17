@@ -1,33 +1,52 @@
 import './style.css';
+import {
+  createGame,
+  getUsersData,
+  createUserData,
+} from './modules/functionalities.js';
 
-const mylist = [
-  {
-    description: 'Mohammad : 100',
-    index: 1,
-  },
-  {
-    description: 'Yakub : 96',
-    index: 2,
-  },
-  {
-    description: 'Yusuf : 95',
-    index: 3,
-  },
-  {
-    description: 'Musa : 90',
-    index: 4,
-  },
-];
+const refreshButton = document.getElementById('refresh-button');
 
-const getmylist = () => {
-  const listGroup = document.querySelector('.score-record');
-  mylist.map((item) => {
-    const listElement = document.createElement('li');
-    listElement.classList = 'score-list';
-    listElement.id = `${item.index}`;
-    listElement.innerText = item.description;
-    return listGroup.appendChild(listElement);
-  });
+const loadScores = async () => {
+  const scoresDisplay = document.getElementById('scores-display');
+
+  while (scoresDisplay.firstChild) {
+    scoresDisplay.removeChild(scoresDisplay.firstChild);
+  }
+
+  const usersData = await getUsersData();
+
+  usersData.result.forEach((entry) => scoresDisplay.insertAdjacentHTML(
+    'beforeend',
+    `
+    <div>${entry.user}: ${entry.score}</div>  
+  `,
+  ));
 };
 
-window.addEventListener('load', getmylist);
+refreshButton.addEventListener('click', loadScores);
+
+const userDataSubmit = document.getElementById('user-data-submit');
+
+userDataSubmit.addEventListener('click', async () => {
+  let userName = document.getElementById('user-name').value;
+  let userScore = document.getElementById('user-score').value;
+
+  if (userName !== '' && userScore !== '') {
+    const data = {
+      user: userName,
+      score: userScore,
+    };
+
+    await createUserData(data);
+
+    userName = '';
+    userScore = '';
+  }
+  loadScores();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  createGame(`Game created at: ${new Date()}`);
+  loadScores();
+});
